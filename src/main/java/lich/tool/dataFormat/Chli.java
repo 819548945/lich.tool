@@ -31,7 +31,17 @@ public  class Chli{
 	 }
 	 /**
 	  * add data
-	  * @param data encData
+	  * @param b encData
+	  * @return oneself
+	  */
+	 public Chli addData(byte b){
+		 byte [] b1= {b};
+		 decodeData.add(b1);
+		 return this;
+	 }
+	 /**
+	  * add data
+	  * @param b encData
 	  * @return oneself
 	  */
 	 public Chli addData(byte[] b){
@@ -59,7 +69,7 @@ public  class Chli{
 	 }
 	 /**
 	  * Get pending data
-	  * @return pending data
+	  * @return pending datas
 	  */
 	 public List<byte[]> getDatas(){
 		 return decodeData;
@@ -88,7 +98,7 @@ public  class Chli{
 	 /**
 	  * decode enc data
 	  * @param encodeData enc data
-	  * @return
+	  * @return oneself
 	  */
 	 public Chli decode(byte[] encodeData) { 
 		 if(!((encodeData[0]==(byte)0x0A)&&(encodeData[1]==(byte)0xF9))) {
