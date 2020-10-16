@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.819548945</groupId>
   <artifactId>tool</artifactId>
- <version>0.0.2-SNAPSHOT</version> 
+ <version>0.0.5-SNAPSHOT</version> 
  <!--   <version>0.0.1</version>-->
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -29,9 +29,11 @@
       <email>819548945@qq.com</email>
       <url>https://github.com/819548945</url>
     </developer>
-  </developers>
 
     
+  </developers>
+
+
    
   
     

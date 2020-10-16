@@ -3,6 +3,8 @@ package lich.tool.dataFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.apache.commons.codec.binary.Base64;
 /**
  * Simple data encapsulation format
  * @author liuch
@@ -107,10 +109,11 @@ public  class Chli{
 		 if(encodeData[2]==(byte)0x01){
 			 decodeData.clear();
 			 for(int i=3;i<encodeData.length;i++) {
-				 byte [] b=new byte[encodeData[i]];
-				 System.arraycopy(encodeData, i+1, b, 0, encodeData[i]);
+				 int x=encodeData[i]<0?encodeData[i]+256:encodeData[i];
+				 byte [] b=new byte[x];
+				 System.arraycopy(encodeData, i+1, b, 0,x);
 				 decodeData.add(b);
-				 i=i+encodeData[i];
+				 i=i+x;
 				 
 			 }
 		 }else {

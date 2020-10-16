@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import lich.tool.object.ReplaceObject.ReplaceMod;
+import lich.tool.object.ReplaceObject.ReplaceObjectRule;
+
 /**
  * copy tools
  * @author liuch
@@ -40,6 +43,7 @@ public class CopyTools {
 	 * copy original field to target field for list
 	 * @param original original
 	 * @param target target
+	 * @param targetClass targetClass
 	 * @param modes mode
 	 * @return true success false error
 	 */
@@ -57,9 +61,8 @@ public class CopyTools {
 		}	 
 	 }
 	/**
-	 * copy original field to target field
-	 * support Map<String,Object> to Map<String,Object>
-	 * Map<String,Object> to Object
+	 *  copy original field to target field support Map &lt; String,Object &gt; to Map &lt; String,Object &gt;
+	 * Map &lt; String,Object &gt; to Object
 	 * @param original original
 	 * @param target target
 	 * @param modes mode
@@ -122,6 +125,33 @@ public class CopyTools {
 					}
 					
 				}
+			  }else if(oClass==tClass) {
+				  	Field[] fields=oClass.getDeclaredFields(); 
+					for(Field field:fields) {
+						field.setAccessible(true);  
+				        Object val = field.get(original); 
+				        if(val!=null)
+				        	field.set(target,val) ;   
+				        field.setAccessible(false);  
+					}
+				  
+			   }else if(oClass!=tClass) {
+				   Field[] fields=oClass.getDeclaredFields(); 
+					for(Field field:fields) {
+						field.setAccessible(true);  
+				        Object val = field.get(original); 
+				        if(val!=null) {
+				        	try {
+				        		Field tField=tClass.getDeclaredField(field.getName());
+				        		tField.setAccessible(true);
+				        		tField.set(target, val);
+				        		tField.setAccessible(false);  
+							} catch (Exception e) {
+								//e.printStackTrace();
+							}
+				        }
+				        field.setAccessible(false);  
+					}
 			   }else {
 				   throw new ConvertException("Conversion type not implemented");
 			   }
