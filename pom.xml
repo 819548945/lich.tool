@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.819548945</groupId>
   <artifactId>tool</artifactId>
- <version>0.0.5-SNAPSHOT</version> 
+ <version>0.0.6-SNAPSHOT</version> 
  <!--   <version>0.0.1</version>-->
   <parent>
     <groupId>org.sonatype.oss</groupId>

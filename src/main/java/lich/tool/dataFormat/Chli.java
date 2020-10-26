@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
 /**
  * Simple data encapsulation format
  * @author liuch
