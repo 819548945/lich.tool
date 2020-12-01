@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class ClassProxy {
 	protected  Object obj;
 	protected  Class cls;
-	protected  URLClassLoader classLoader;
+	protected  ClassLoader classLoader;
 	/**
 	 * 
 	 * @param className className
@@ -33,11 +33,28 @@ public class ClassProxy {
 		this.cls  =  classLoader.loadClass(className);
 		this.obj=cls.newInstance();
 	}
+	/**
+	 * 
+	 * @param className
+	 * @param classLoader
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws MalformedURLException
+	 * @throws URISyntaxException
+	 */
+	@Deprecated
 	protected ClassProxy(String className,URLClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException {
 		this.classLoader=classLoader;
 		this.cls  =  classLoader.loadClass(className);
 		this.obj=cls.newInstance();
 	}
+	protected ClassProxy(String className,ClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException {
+		this.classLoader=classLoader;
+		this.cls  =  classLoader.loadClass(className);
+		this.obj=cls.newInstance();
+	}
+
 	/**
 	 * 
 	 * @param obj obj
@@ -53,6 +70,8 @@ public class ClassProxy {
 		this.cls  =  obj.getClass();
 		this.obj=obj;
 	}
+	
+	
 	protected ClassProxy(Object obj,URLClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException {
 		this.classLoader=classLoader;
 		this.cls  =  obj.getClass();
@@ -62,11 +81,12 @@ public class ClassProxy {
 	 * getClassLoader
 	 * @return classLoader
 	 */
-	protected URLClassLoader getClassLoader() {
+	public ClassLoader getClassLoader() {
 		return classLoader;
 	}
 	
 	/**
+	 * 
 	 * exec method
 	 * @param methodName method Name
 	 * @param d Parameters
@@ -117,7 +137,7 @@ public class ClassProxy {
 						for(int i=0;i<jarArray.length;i++)jarUrls.add(jarArray[i].toURI().toURL());
 					}
 				}
-				return new URLClassLoader(jarUrls.toArray(new URL[jarUrls.size()]));
+				return new CLClassloader(jarUrls.toArray(new URL[jarUrls.size()]),ClassProxy.class.getClassLoader());
 			}else {
 				return null;
 			}
