@@ -3,6 +3,7 @@
   <groupId>com.github.819548945</groupId>
   <artifactId>tool</artifactId>
  <version>0.0.6</version> 
+ <packaging>jar</packaging>
  <!--   <version>0.0.1</version>-->
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -30,9 +31,24 @@
       <url>https://github.com/819548945</url>
     </developer>
 
-    
   </developers>
-
+ <dependencies>
+  	<dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+    </dependency>
+	<!-- <dependency>
+	    <groupId>org.bouncycastle</groupId>
+	    <artifactId>bcprov-jdk15on</artifactId>
+	    <version>1.51</version>
+	</dependency>
+		<dependency>
+	    <groupId>org.bouncycastle</groupId>
+	    <artifactId>bcpkix-jdk15on</artifactId>
+	    <version>1.51</version>
+	</dependency> -->
+</dependencies>
 
    
   

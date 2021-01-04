@@ -1,6 +1,7 @@
 package lich.tool.conflictResolution;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -31,7 +32,7 @@ public class ClassProxy {
 	protected ClassProxy(String className,URL... jarBasePaths) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException {
 		this.classLoader=initClassLoader(jarBasePaths);
 		this.cls  =  classLoader.loadClass(className);
-		this.obj=cls.newInstance();
+	//	this.obj=cls.newInstance();
 	}
 	/**
 	 * 
@@ -47,12 +48,12 @@ public class ClassProxy {
 	protected ClassProxy(String className,URLClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException {
 		this.classLoader=classLoader;
 		this.cls  =  classLoader.loadClass(className);
-		this.obj=cls.newInstance();
+	//	this.obj=cls.newInstance();
 	}
 	protected ClassProxy(String className,ClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException {
 		this.classLoader=classLoader;
 		this.cls  =  classLoader.loadClass(className);
-		this.obj=cls.newInstance();
+		//this.obj=cls.newInstance();
 	}
 
 	/**
@@ -70,9 +71,13 @@ public class ClassProxy {
 		this.cls  =  obj.getClass();
 		this.obj=obj;
 	}
-	
-	
+	@Deprecated
 	protected ClassProxy(Object obj,URLClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException {
+		this.classLoader=classLoader;
+		this.cls  =  obj.getClass();
+		this.obj=obj;
+	}
+	protected ClassProxy(Object obj,ClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException {
 		this.classLoader=classLoader;
 		this.cls  =  obj.getClass();
 		this.obj=obj;
@@ -96,10 +101,12 @@ public class ClassProxy {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
+	 * @throws InstantiationException 
 	 */
-	public Object exec(String methodName,Object ... d) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public Object exec(String methodName,Object ... d) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
 		Parameters p=	new Parameters(d);
 		Method method1 =cls.getMethod(methodName,p.getClssArray());
+		if(obj==null) this.obj=cls.newInstance();
 		return method1.invoke(obj,p.getObjArray());
 	}
 	/**
@@ -112,10 +119,80 @@ public class ClassProxy {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
+	 * @throws InstantiationException 
 	 */
-	public Object exec(String methodName,Parameters p) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public Object exec(String methodName,Parameters p) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
 		Method method1 =cls.getMethod(methodName,p.getClssArray());
+		if(obj==null) this.obj=cls.newInstance();
 		return method1.invoke(obj,p.getObjArray());
+	}
+	/**
+	 * exec static method
+	 * @param methodName method Name
+	 * @param p Parameters
+	 * @return exec return
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws InstantiationException
+	 */
+	public Object execStatic(String methodName,Parameters p) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+		Method method1 =cls.getMethod(methodName,p.getClssArray());
+		return method1.invoke(null,p.getObjArray());
+	}
+	/**
+	 * exec method
+	 * @param methodName method Name
+	 * @param p Parameters
+	 * @return  exec return
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws InstantiationException
+	 */
+	public Object execStatic(String methodName,Object ... d) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+		Parameters p=	new Parameters(d);
+		Method method1 =cls.getMethod(methodName,p.getClssArray());
+		return method1.invoke(null,p.getObjArray());
+	}
+	/**
+	 * 
+	 * @param o Parameters
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public ClassProxy newInstance(Object ... o) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		if(o.length==0)this.obj=cls.newInstance();
+		else {
+			Class[] c=new Class[o.length];
+			for(int i=0;i<o.length;i++)c[i]=o.getClass();
+			cls.getConstructor(c).newInstance(o);
+		}
+		return this;
+	}
+	/**
+	 * 
+	 * @param p
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+	public ClassProxy newInstance(Parameters p) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		cls.getConstructor(p.getClssArray()).newInstance(p.getObjArray());
+		return this;
 	}
 	/**
 	 * Gets the proxy object
@@ -147,5 +224,10 @@ public class ClassProxy {
 		}
 		
 		
+	}
+	public Object getFieldValue(String fieldName) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field f=cls.getDeclaredField(fieldName);
+		f.setAccessible(true);
+		return f.get(obj);
 	}
 }
