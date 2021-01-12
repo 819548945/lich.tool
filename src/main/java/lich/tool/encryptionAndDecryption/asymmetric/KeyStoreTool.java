@@ -21,9 +21,9 @@ import javax.security.auth.x500.X500Principal;
 
 import lich.tool.conflictResolution.Parameters;
 import lich.tool.encryptionAndDecryption.EncryptionAndDecryptionException;
+import lich.tool.encryptionAndDecryption.Proxy;
 import lich.tool.encryptionAndDecryption.asymmetric.OtherObj.P12Data;
 import lich.tool.encryptionAndDecryption.asymmetric.OtherObj.PublicKeyInfo;
-import lich.tool.encryptionAndDecryption.proxy.Proxy;
 import lich.tool.object.CopyTools;
 /**
  * 密钥对工具类
@@ -32,13 +32,16 @@ import lich.tool.object.CopyTools;
  */
 public class KeyStoreTool {
 	private static Proxy keyStoreToolProxy;
-	static{
+	private static void init() throws EncryptionAndDecryptionException {
 		try {
-			keyStoreToolProxy=new Proxy("lich.tool.encryptionAndDecryption.represented.KeyStoreTool");
+			if(keyStoreToolProxy==null) {
+				keyStoreToolProxy=new Proxy("lich.tool.encryptionAndDecryption.core.asymmetric.KeyStoreTool");
+			
+			}
 		} catch (Exception e) {
-		}
+			throw new EncryptionAndDecryptionException(e);
+		}	
 	}
-	
 	/**
 	 * 导出p12
 	 * @param keyPair 密钥对
@@ -50,7 +53,8 @@ public class KeyStoreTool {
 	 */
 	public static byte[] toPKCS12(KeyPair keyPair,PublicKeyInfo pki,String alias,String pwd) throws EncryptionAndDecryptionException{
 		try {
-			return (byte[])keyStoreToolProxy.execStatic("toPKCS12", new Parameters().addParameter(keyPair).addParameter(pki).addParameter(alias).addParameter(pwd));
+			init();
+			return (byte[])keyStoreToolProxy.exec("toPKCS12", new Parameters().addParameter(keyPair).addParameter(pki).addParameter(alias).addParameter(pwd));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -66,7 +70,8 @@ public class KeyStoreTool {
 	 */
 	public static byte[] toPKCS12(PrivateKey prk,Certificate[] certs,String alias,String pwd) throws EncryptionAndDecryptionException  {
 		try {
-			return (byte[])keyStoreToolProxy.execStatic("toPKCS12", new Parameters().addParameter(prk).addParameter(certs).addParameter(alias).addParameter(pwd));
+			init();
+			return (byte[])keyStoreToolProxy.exec("toPKCS12", new Parameters().addParameter(prk).addParameter(certs).addParameter(alias).addParameter(pwd));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -80,8 +85,9 @@ public class KeyStoreTool {
 	 */
 	public static P12Data loadPKCS12(byte [] p12,String pwd) throws EncryptionAndDecryptionException {
 		try {
+			init();
 			P12Data p12Data=new P12Data();
-			CopyTools.copyField(keyStoreToolProxy.execStatic("loadPKCS12", new Parameters().addParameter(p12).addParameter(pwd)), p12Data);
+			CopyTools.copyField(keyStoreToolProxy.exec("loadPKCS12", new Parameters().addParameter(p12).addParameter(pwd)), p12Data);
 			return (p12Data);
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
@@ -98,7 +104,8 @@ public class KeyStoreTool {
 	 */
 	public static byte[] toPKCS10(PrivateKey privateKey,PublicKey publicKey,String dn,String algorithm) throws EncryptionAndDecryptionException{
 		try {
-			return (byte[] )keyStoreToolProxy.execStatic("toPKCS10", new Parameters().addParameter(PrivateKey.class,privateKey).addParameter(PublicKey.class,publicKey).addParameter(dn).addParameter(algorithm));
+			init();
+			return (byte[] )keyStoreToolProxy.exec("toPKCS10", new Parameters().addParameter(PrivateKey.class,privateKey).addParameter(PublicKey.class,publicKey).addParameter(dn).addParameter(algorithm));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}

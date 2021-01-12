@@ -1,5 +1,9 @@
 package lich.tool.conflictResolution;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -41,4 +45,15 @@ public class CLClassloader extends URLClassLoader{
                 return c;
             }
         }
+    public Class loadMyClass(String className,InputStream in) throws IOException  {
+    	
+    	  byte[] buffer = new byte[1024];
+          int len = 0;
+          ByteArrayOutputStream bos = new ByteArrayOutputStream();
+          while((len = in.read(buffer)) != -1) {
+              bos.write(buffer, 0, len);
+          }
+          byte[] bytes =bos.toByteArray();
+		  return defineClass(className, bytes, 0, bytes.length);           
+    }
 }

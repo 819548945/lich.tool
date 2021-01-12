@@ -1,46 +1,25 @@
 package lich.tool.encryptionAndDecryption.asymmetric;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
+
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Signature;
-import java.security.SignatureException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Calendar;
-import java.util.Date;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import org.apache.commons.codec.binary.Base64;
-
 import lich.tool.conflictResolution.Parameters;
 import lich.tool.encryptionAndDecryption.EncryptionAndDecryptionException;
-import lich.tool.encryptionAndDecryption.asymmetric.OtherObj.PublicKeyInfo;
-import lich.tool.encryptionAndDecryption.proxy.Proxy;
+import lich.tool.encryptionAndDecryption.Proxy;
+
 
 public class AsymmetricTool{
 	private static Proxy asymmetricToolProxy;
-	static{
+	private static void init() throws EncryptionAndDecryptionException {
 		try {
-			asymmetricToolProxy=new Proxy("lich.tool.encryptionAndDecryption.represented.AsymmetricTool");
+			if(asymmetricToolProxy==null) {
+				asymmetricToolProxy=new Proxy("lich.tool.encryptionAndDecryption.core.asymmetric.AsymmetricTool");
+			
+			}
 		} catch (Exception e) {
-		}
+			throw new EncryptionAndDecryptionException(e);
+		}	
 	}
 	/**
 	 * 公钥加密
@@ -53,7 +32,8 @@ public class AsymmetricTool{
 	 */
 	public static byte [] encrypt(byte[] data, PublicKey publicKey,String algorithm) throws EncryptionAndDecryptionException {
 		try {
-			return (byte [])asymmetricToolProxy.execStatic("encrypt", new Parameters().addParameter(data).addParameter(PublicKey.class,publicKey).addParameter(algorithm));
+			init();
+			return (byte [])asymmetricToolProxy.exec("encrypt", new Parameters().addParameter(data).addParameter(PublicKey.class,publicKey).addParameter(algorithm));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -70,7 +50,8 @@ public class AsymmetricTool{
 	 */
     public static byte [] decrypt(byte[]  encodedataByte, PrivateKey privateKey,String algorithm) throws EncryptionAndDecryptionException {
     	try {
-			return (byte [])asymmetricToolProxy.execStatic("decrypt", new Parameters().addParameter(encodedataByte).addParameter(PrivateKey.class,privateKey).addParameter(algorithm));
+    		init();
+			return (byte [])asymmetricToolProxy.exec("decrypt", new Parameters().addParameter(encodedataByte).addParameter(PrivateKey.class,privateKey).addParameter(algorithm));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -84,7 +65,8 @@ public class AsymmetricTool{
      */
     public static byte [] sign(byte[] ori, PrivateKey privateKey,String algorithm) throws EncryptionAndDecryptionException {
     	try {
-			return (byte [])asymmetricToolProxy.execStatic("sign", new Parameters().addParameter(ori).addParameter(PrivateKey.class,privateKey).addParameter(algorithm));
+    		init();
+			return (byte [])asymmetricToolProxy.exec("sign", new Parameters().addParameter(ori).addParameter(PrivateKey.class,privateKey).addParameter(algorithm));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -112,7 +94,8 @@ public class AsymmetricTool{
     */
     public static boolean verify(byte[] sign,byte[] ori, PublicKey publicKey,String algorithm) throws EncryptionAndDecryptionException {
     	try {
-			return (boolean)asymmetricToolProxy.execStatic("verify", new Parameters().addParameter(sign).addParameter(ori).addParameter(PublicKey.class,publicKey).addParameter(algorithm));
+    		init();
+			return (Boolean)asymmetricToolProxy.exec("verify", new Parameters().addParameter(sign).addParameter(ori).addParameter(PublicKey.class,publicKey).addParameter(algorithm));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -128,5 +111,64 @@ public class AsymmetricTool{
     public static boolean verify(byte[] sign,byte[] ori,X509Certificate cert) throws EncryptionAndDecryptionException  {
     	return verify(sign,ori, cert.getPublicKey(),cert.getSigAlgName());
     }
+    
+    /**
+	 * SM2加密数据格式转换 
+	 * @param b
+	 * @return c1c2c3
+     * @throws EncryptionAndDecryptionException 
+	 */
+	public static byte[] SM2CipherToSM2EncDataC1C2C3(byte[] b)throws EncryptionAndDecryptionException {	
+		try {
+			init();
+			return (byte[])asymmetricToolProxy.exec("SM2CipherToSM2EncDataC1C2C3", new Parameters().addParameter(b));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+	}
+	/**
+	 * SM2加密数据格式转换 
+	 * @param b
+	 * @return SM2Cipher
+	 * @throws EncryptionAndDecryptionException 
+	 */
+	public static byte[] SM2EncDataC1C2C3ToSM2Cipher(byte[] b) throws EncryptionAndDecryptionException {	
+		try {
+			init();
+			return (byte[])asymmetricToolProxy.exec("SM2EncDataC1C2C3ToSM2Cipher", new Parameters().addParameter(b));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+	}
+	/**
+	 * SM2签名数据格式转换 
+	 * @param b
+	 * @return rs
+	 * @throws EncryptionAndDecryptionException 
+	 * @throws IOException
+	 */
+	public static byte[]  SM2SignatureToRS(byte[] b) throws EncryptionAndDecryptionException  {
+		try {
+			init();
+			return (byte[])asymmetricToolProxy.exec("SM2SignatureToRS", new Parameters().addParameter(b));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+	}
+	/**
+	 * SM2签名数据格式转换
+	 * @param b
+	 * @return SM2Signature
+	 * @throws EncryptionAndDecryptionException 
+	 */
+	public static byte[] RSToSM2Signature(byte[] b) throws EncryptionAndDecryptionException {
+		try {
+			init();
+			return (byte[])asymmetricToolProxy.exec("RSToSM2Signature", new Parameters().addParameter(b));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+	} 
+    
 
 }

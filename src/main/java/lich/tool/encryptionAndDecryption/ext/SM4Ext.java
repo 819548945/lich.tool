@@ -8,8 +8,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import lich.tool.encryptionAndDecryption.symmetric.Provider;
-import lich.tool.encryptionAndDecryption.symmetric.SymmetricTool;
 
 /**
  * SM4扩展接口
@@ -29,9 +27,7 @@ public interface SM4Ext {
 	 * @throws NoSuchAlgorithmException 
 	 * @throws InvalidKeyException 
 	 */
-	  public default byte[] encrypt(byte[] in, byte[] keyBytes) throws Exception {
-		  return  SymmetricTool.encryptEcb(in, keyBytes, Provider.Cipher.SM4_ECB_NOPadding);
-	  }
+	  public byte[] encrypt(byte[] in, byte[] keyBytes) throws Exception ;
 	  /**
 	   * SM4解密
 	   * @param in 密文
@@ -39,7 +35,5 @@ public interface SM4Ext {
 	   * @return 姐猕猴数据
 	
 	   */
-	  public default  byte[] decrypt(byte[] in, byte[] keyBytes) throws Exception {
-		  return  SymmetricTool.decryptEcb(in, keyBytes, Provider.Cipher.SM4_ECB_NOPadding);
-	  }
+	  public  byte[] decrypt(byte[] in, byte[] keyBytes) throws Exception ;
 }

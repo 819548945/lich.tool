@@ -1,14 +1,9 @@
 package lich.tool.encryptionAndDecryption.asymmetric;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.SecureRandom;
-
 import lich.tool.conflictResolution.Parameters;
 import lich.tool.encryptionAndDecryption.EncryptionAndDecryptionException;
-import lich.tool.encryptionAndDecryption.proxy.Proxy;
+import lich.tool.encryptionAndDecryption.Proxy;
 
 /**
  * 密钥对生成工具
@@ -17,13 +12,17 @@ import lich.tool.encryptionAndDecryption.proxy.Proxy;
  */
 public class KeyPairTool{
 	private static Proxy keyPairToolProxy;
-	static{
+	private static void init() throws EncryptionAndDecryptionException {
 		try {
-			keyPairToolProxy=new Proxy("lich.tool.encryptionAndDecryption.represented.KeyPairTool");
+			if(keyPairToolProxy==null) {
+				keyPairToolProxy=new Proxy("lich.tool.encryptionAndDecryption.core.asymmetric.KeyPairTool");
+			
+			}
 		} catch (Exception e) {
-		}
+			throw new EncryptionAndDecryptionException(e);
+		}	
 	}
-  
+	
 	/**
 	 * SM2密钥对生成
 	 * @return SM2密钥对
@@ -31,7 +30,8 @@ public class KeyPairTool{
 	 */
 	public static KeyPair generateGMKeyPair() throws EncryptionAndDecryptionException {
 		try {
-			return (KeyPair)keyPairToolProxy.execStatic("generateGMKeyPair");
+			init();
+			return (KeyPair)keyPairToolProxy.exec("generateGMKeyPair");
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -44,7 +44,8 @@ public class KeyPairTool{
 	 */
 	public static  KeyPair generateRSAKeyPair(int keySize) throws EncryptionAndDecryptionException {
 		try {
-			return (KeyPair)keyPairToolProxy.execStatic("generateRSAKeyPair", new Parameters().addParameter(keySize));
+			init();
+			return (KeyPair)keyPairToolProxy.exec("generateRSAKeyPair", new Parameters().addParameter(int.class,keySize));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}

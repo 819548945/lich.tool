@@ -14,6 +14,15 @@ public class Parameters {
 	public Parameters() {
 		
 	}
+	public void  reload(Class[] cls,Object [] o){
+		clss.clear();
+		objs.clear();
+		for (int i = 0; i < o.length; i++) {
+			clss.add(cls[i]);
+			objs.add(o[i]);
+		}
+	}
+	
 	/**
 	 * @param objs parameters
 	 */

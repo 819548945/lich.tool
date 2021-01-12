@@ -31,7 +31,8 @@ public class PublicKeyInfo {
 	 */
 	private String signatureAlgorithm;
 	
-	
+	private  PublicKeyInfo() {
+	}
 	public PublicKeyInfo(Date notBefore, Date notAfter, String subject) {
 		super();
 		this.notBefore = notBefore;

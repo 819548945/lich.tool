@@ -5,39 +5,56 @@ import java.security.PublicKey;
 import java.security.cert.Certificate;
 import lich.tool.conflictResolution.Parameters;
 import lich.tool.encryptionAndDecryption.EncryptionAndDecryptionException;
+import lich.tool.encryptionAndDecryption.Proxy;
 import lich.tool.encryptionAndDecryption.asymmetric.OtherObj.PublicKeyInfo;
-import lich.tool.encryptionAndDecryption.proxy.Proxy;
 
 
 public class PublicKeyTool{
 	private static Proxy publicKeyToolProxy;
-	static{
+	private static void init() throws EncryptionAndDecryptionException {
 		try {
-			publicKeyToolProxy=new Proxy("lich.tool.encryptionAndDecryption.represented.PublicKeyTool");
+			if(publicKeyToolProxy==null) {
+				publicKeyToolProxy=new Proxy("lich.tool.encryptionAndDecryption.core.asymmetric.PublicKeyTool");
+			}
 		} catch (Exception e) {
-		}
+			throw new EncryptionAndDecryptionException(e);
+		}	
 	}
-	
-	
-	
+
 	public static PublicKey x509CertificateToPublicKey(byte [] x509Certificate) throws  EncryptionAndDecryptionException{
 		try {
-			return (PublicKey)publicKeyToolProxy.execStatic("x509CertificateToPublicKey", new Parameters().addParameter(x509Certificate));
+			init();
+			return (PublicKey)publicKeyToolProxy.exec("x509CertificateToPublicKey", new Parameters().addParameter(x509Certificate));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}	
 	}
 	/**
+	 * 加载X509证书
+	 * @param x509Certificate
+	 * @return x509Certificate
+	 * @throws EncryptionAndDecryptionException
+	 */
+	public static Certificate 	loadX509Certificate(byte [] x509Certificate) throws EncryptionAndDecryptionException {
+		try {
+			init();
+			return (Certificate)publicKeyToolProxy.exec("loadX509Certificate", new Parameters().addParameter(x509Certificate));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}	
+	}
+	
+	/**
 	 * 生成公钥证书
 	 * @param pki 公钥信息
 	 * @param pk 公钥
-	 * @param ii 钱发人信息
 	 * @return 公钥证书
 	 * @throws EncryptionAndDecryptionException 
 	 */
 	public static Certificate getX509Certificate(PublicKeyInfo pki,PublicKey pk) throws EncryptionAndDecryptionException{
 		try {
-			return (Certificate)publicKeyToolProxy.execStatic("getX509Certificate", new Parameters().addParameter(pki).addParameter(pk));
+			init();
+			return (Certificate)publicKeyToolProxy.exec("getX509Certificate", new Parameters().addParameter(pki).addParameter(PublicKey.class,pk));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}	
@@ -50,7 +67,8 @@ public class PublicKeyTool{
 	 */
 	public static PublicKey toGMPublicKey(byte[] P) throws EncryptionAndDecryptionException {
 		try {
-			return (PublicKey)publicKeyToolProxy.execStatic("toGMPublicKey", new Parameters().addParameter(P));
+			init();
+			return (PublicKey)publicKeyToolProxy.exec("toGMPublicKey", new Parameters().addParameter(P));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -58,7 +76,7 @@ public class PublicKeyTool{
 	}
 	/**
 	 * RSA公钥生成公钥证书 参数N 65537
-	 * @param E 公钥
+	 * @param N 公钥
 	 * @return BCRSAPublicKey
 	 * @throws EncryptionAndDecryptionException 
 	 */
@@ -75,7 +93,8 @@ public class PublicKeyTool{
 	 */
 	public static PublicKey toRSAPublicKey(byte[] N,byte[] E) throws EncryptionAndDecryptionException {
 		try {
-			return (PublicKey)publicKeyToolProxy.execStatic("toGMPublicKey", new Parameters().addParameter(N).addParameter(E));
+			init();
+			return (PublicKey)publicKeyToolProxy.exec("toGMPublicKey", new Parameters().addParameter(N).addParameter(E));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -83,14 +102,15 @@ public class PublicKeyTool{
 	}
 	/**
 	 * 获取公钥byte
-	 * @param publicKey公钥
+	 * @param publicKey 公钥
 	 * @return GM P 04|x|y
 	 * 		   RSA N 
 	 * @throws EncryptionAndDecryptionException
 	 */
 	public static byte[] getPublicKeyByte(PublicKey publicKey) throws EncryptionAndDecryptionException {
 		try {
-			return (byte[])publicKeyToolProxy.execStatic("getPublicKeyByte", new Parameters().addParameter(publicKey));
+			init();
+			return (byte[])publicKeyToolProxy.exec("getPublicKeyByte", new Parameters().addParameter(PublicKey.class,publicKey));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
