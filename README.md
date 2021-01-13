@@ -39,7 +39,7 @@
 
 git：  https://github.com/819548945/tool.encryptionAndDecryption
 
-文档： http://doc.lich.tk/0.1.0/encryptionAndDecryption.core.html
+文档： http://doc.lich.tk/
 
 bug、意见反馈: liuchao_@outlook.com
 
