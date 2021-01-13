@@ -2,6 +2,7 @@ package lich.tool.encryptionAndDecryption;
 
 import java.io.InputStream;
 import java.security.PrivateKey;
+import java.security.Provider;
 import java.security.cert.X509Certificate;
 
 import lich.tool.conflictResolution.Parameters;
@@ -14,7 +15,6 @@ import lich.tool.encryptionAndDecryption.ext.SM4Ext;
  */
 public class Base {
 	private static Proxy baseProxy;
-	public static java.security.Provider  BC;
 	private static void init() throws EncryptionAndDecryptionException {
 		try {
 			if(baseProxy==null) {
@@ -25,6 +25,18 @@ public class Base {
 		}
 		
 	}
+	public static Provider getBC() throws EncryptionAndDecryptionException {
+		try {
+			init();
+			return (Provider)baseProxy.getFieldValue("BC");
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+		
+		
+	}
+	
+	
 	/**
 	 * 配置SM1实现
 	 * @param  sm1Ext

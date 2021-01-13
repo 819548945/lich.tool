@@ -16,6 +16,9 @@ import lich.tool.conflictResolution.ConflictResolutionException;
 public class Proxy extends ClassProxy{
 	protected  static  CLClassloader classLoader;
 	
+	static {
+		classLoader=initClassLoader(Proxy.class.getResource("lib"));
+	}
 	public Proxy(String className) throws EncryptionAndDecryptionException, ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException, ConflictResolutionException{
 		super(className, classLoader);		
 	}
@@ -30,12 +33,10 @@ public class Proxy extends ClassProxy{
 		try {
 			if(classLoader==null) {
 				classLoader=initClassLoader(url);
-				Base.BC=(Provider)new Proxy("lich.tool.encryptionAndDecryption.core.Base").getFieldValue("BC");
 			}
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
 		
-	}	
-	
+	}		
 }

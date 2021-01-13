@@ -21,11 +21,11 @@ import lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher;
 
 public class TestSymmetric{
 	
-	public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+	public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, EncryptionAndDecryptionException {
 		new TestSymmetric().test();
 	}
 	@Test
-	public void test() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+	public void test() throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, EncryptionAndDecryptionException {
 		
 		byte[] pwd=new byte[8];
 		testEcb(lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher.SM4_ECB_NOPadding);
@@ -62,7 +62,7 @@ public class TestSymmetric{
 		
 		
 	}
-	public void testEcb(Cipher c,byte ... pw) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+	public void testEcb(Cipher c,byte ... pw) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, EncryptionAndDecryptionException {
 		System.out.println( "----------test:"+c+"---------------");
 		if(pw.length==0)pw="1234567812345678".getBytes();
 		String ori="1111111111111111";
@@ -74,7 +74,7 @@ public class TestSymmetric{
 		System.out.println( "----------test:"+c+" OK---------------");
 		
 	}
-	public void testCbc(Cipher c,byte ... pw) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+	public void testCbc(Cipher c,byte ... pw) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, EncryptionAndDecryptionException {
 		
 		byte[] b= {1,2,3,4,5,6,7,8,1,2,3,4,5,6,7,8};
 		System.out.println( "----------test:"+c+"---------------");
@@ -89,7 +89,7 @@ public class TestSymmetric{
 		System.out.println( "----------test:"+c+" OK---------------");
 		
 	}
-	public void testCbc(Cipher c,byte[] pw,byte[] iv) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+	public void testCbc(Cipher c,byte[] pw,byte[] iv) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, EncryptionAndDecryptionException {
 		System.out.println( "----------test1:"+c+"---------------");
 		String ori="1111111111111111";
 		System.out.println("ori:"+ori);

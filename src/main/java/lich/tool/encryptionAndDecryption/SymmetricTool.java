@@ -32,9 +32,10 @@ public class SymmetricTool extends Base{
 	 * @throws InvalidKeyException
 	 * @throws IllegalBlockSizeException
 	 * @throws BadPaddingException
+	 * @throws EncryptionAndDecryptionException 
 	 */
-	public static byte[] encrypt(byte [] ori,byte [] pwd,lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-		Cipher c=Cipher.getInstance(algorithm.getAlgorithm(), BC);
+	public static byte[] encrypt(byte [] ori,byte [] pwd,lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, EncryptionAndDecryptionException {
+		Cipher c=Cipher.getInstance(algorithm.getAlgorithm(), getBC());
 		SecretKey key=new SecretKeySpec(pwd, algorithm.getKeyType());
     	c.init(Cipher.ENCRYPT_MODE, key);
 		return c.doFinal(ori);
@@ -51,9 +52,10 @@ public class SymmetricTool extends Base{
 	 * @throws InvalidKeyException
 	 * @throws IllegalBlockSizeException
 	 * @throws BadPaddingException
+	 * @throws EncryptionAndDecryptionException 
 	 */
-	public static byte[] decrypt(byte [] enc,byte [] pwd,lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-		Cipher c=Cipher.getInstance(algorithm.getAlgorithm(), BC);
+	public static byte[] decrypt(byte [] enc,byte [] pwd,lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher algorithm) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, EncryptionAndDecryptionException {
+		Cipher c=Cipher.getInstance(algorithm.getAlgorithm(), getBC());
 		SecretKey key=new SecretKeySpec(pwd, algorithm.getKeyType());
     	c.init(Cipher.DECRYPT_MODE, key,new SecureRandom());
 		return c.doFinal(enc);
@@ -73,9 +75,10 @@ public class SymmetricTool extends Base{
 	 * @throws IllegalBlockSizeException
 	 * @throws BadPaddingException
 	 * @throws InvalidAlgorithmParameterException
+	 * @throws EncryptionAndDecryptionException 
 	 */
-	public static byte[] encrypt(byte [] ori,byte [] pwd,lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher algorithm,byte [] iv) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
-		Cipher c=Cipher.getInstance(algorithm.getAlgorithm(), BC);
+	public static byte[] encrypt(byte [] ori,byte [] pwd,lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher algorithm,byte [] iv) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, EncryptionAndDecryptionException {
+		Cipher c=Cipher.getInstance(algorithm.getAlgorithm(), getBC());
 		SecretKey key=new SecretKeySpec(pwd, algorithm.getKeyType());
     	c.init(Cipher.ENCRYPT_MODE, key,new IvParameterSpec(iv));
 		return c.doFinal(ori);
@@ -94,9 +97,10 @@ public class SymmetricTool extends Base{
 	 * @throws IllegalBlockSizeException
 	 * @throws BadPaddingException
 	 * @throws InvalidAlgorithmParameterException
+	 * @throws EncryptionAndDecryptionException 
 	 */
-	public static byte[] decrypt(byte [] enc,byte [] pwd,lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher algorithm,byte [] iv) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
-		Cipher c=Cipher.getInstance(algorithm.getAlgorithm(), BC);
+	public static byte[] decrypt(byte [] enc,byte [] pwd,lich.tool.encryptionAndDecryption.ProviderMode.Symmetric.Cipher algorithm,byte [] iv) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, EncryptionAndDecryptionException {
+		Cipher c=Cipher.getInstance(algorithm.getAlgorithm(), getBC());
 		SecretKey key=new SecretKeySpec(pwd, algorithm.getKeyType());
     	c.init(Cipher.DECRYPT_MODE, key,new IvParameterSpec(iv));
 		return c.doFinal(enc);

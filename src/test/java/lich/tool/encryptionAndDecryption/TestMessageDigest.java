@@ -13,6 +13,9 @@ public class TestMessageDigest {
 	}
 	@Test
 	public void test1() throws Exception {
+		Proxy.init(TestMessageDigest.class.getResource("lib"));
+		
+		System.out.println();
 		this.test(ProviderMode.MessageDigest.MD2);
 		this.test(ProviderMode.MessageDigest.MD4);
 		this.test(ProviderMode.MessageDigest.MD5);
