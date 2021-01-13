@@ -37,7 +37,7 @@
 * 支持MD5\SHA\SM3等散列算法
 * 支持AES\DES\SM4等对称加密算法
 
-git：  https://github.com/819548945/tool.encryptionAndDecryption
+git：  https://github.com/819548945/lich.tool/
 
 文档： http://doc.lich.tk/
 
