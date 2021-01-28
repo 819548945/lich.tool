@@ -199,7 +199,7 @@ public class ClassProxy {
 		if(o.length==0)this.obj=cls.newInstance();
 		else {
 			Parameters p=	switchClassLoader(new Parameters(o));
-			cls.getConstructor(p.getClssArray()).newInstance(p.getObjArray());
+			obj=cls.getConstructor(p.getClssArray()).newInstance(p.getObjArray());
 		}
 		return this;
 	}
@@ -218,7 +218,7 @@ public class ClassProxy {
 	 */
 	public ClassProxy newInstance(Parameters p) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, IOException, ConflictResolutionException {
 		switchClassLoader(p);
-		cls.getConstructor(p.getClssArray()).newInstance(p.getObjArray());
+		obj=cls.getConstructor(p.getClssArray()).newInstance(p.getObjArray());
 		return this;
 	}
 	/**
