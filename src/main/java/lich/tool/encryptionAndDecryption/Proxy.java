@@ -14,12 +14,10 @@ import lich.tool.conflictResolution.ConflictResolutionException;
 
 
 public class Proxy extends ClassProxy{
-	protected  static  CLClassloader classLoader;
+	protected  static  CLClassloader classLoader=initClassLoader();
 	
-	static {
-		classLoader=initClassLoader(Proxy.class.getResource("lib"));
-	}
 	public Proxy(String className) throws EncryptionAndDecryptionException, ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException, ConflictResolutionException{
+		
 		super(className, classLoader);		
 	}
 	public Proxy(String className,InputStream in) throws ClassNotFoundException, InstantiationException, IllegalAccessException, URISyntaxException, IOException, ConflictResolutionException {

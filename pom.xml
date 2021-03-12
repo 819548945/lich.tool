@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.819548945</groupId>
   <artifactId>tool</artifactId>
- <version>0.1.2</version> 
+ <version>0.1.3</version> 
  <packaging>jar</packaging>
  <!--   <version>0.0.1</version>-->
   <parent>
@@ -47,11 +47,13 @@
         <profile>
             <id>release</id>
             <activation>
-                <jdk>[1.8,)</jdk>
+                <jdk>[1.7,)</jdk>
             </activation>
-             <properties>
+           <!--   
+           <properties>
 				<additionalparam>-Xdoclint:none</additionalparam>
 			</properties>
+			 -->
             <distributionManagement>
                 <snapshotRepository>
                     <!--id 要与setting.xml server id一致-->
