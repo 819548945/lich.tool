@@ -1,6 +1,7 @@
 package lich.tool.encryptionAndDecryption.asymmetric;
 
 
+import java.io.IOException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
@@ -170,5 +171,32 @@ public class AsymmetricTool{
 		}
 	} 
     
-
+	/**
+   	 * SM2加密数据格式转换 
+   	 * @param b SM2Cipher
+   	 * @return 国密C1C3C2
+	 * @throws EncryptionAndDecryptionException 
+   	 */
+     public static byte[]  SM2CipherTOGMC1C3C2(byte[] b) throws  EncryptionAndDecryptionException{
+    	 try {
+ 			init();
+ 			return (byte[])asymmetricToolProxy.exec("SM2CipherTOGMC1C3C2", new Parameters().addParameter(b));
+ 		} catch (Exception e) {
+ 			throw new EncryptionAndDecryptionException(e);
+ 		}
+     }
+     /**
+	 * SM2加密数据格式转换 
+	 * @param b 国密C1C3C2
+	 * @return SM2Cipher
+	 * @throws IOException
+	 */
+     public static byte[]   GMC1C3C2TOSM2Cipher(byte[] b) throws  EncryptionAndDecryptionException{
+    	 try {
+  			init();
+  			return (byte[])asymmetricToolProxy.exec("GMC1C3C2TOSM2Cipher", new Parameters().addParameter(b));
+  		} catch (Exception e) {
+  			throw new EncryptionAndDecryptionException(e);
+  		}
+     }
 }
