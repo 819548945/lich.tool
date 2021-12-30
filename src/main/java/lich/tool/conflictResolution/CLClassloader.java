@@ -34,9 +34,7 @@ public class CLClassloader extends URLClassLoader{
                     if (c == null) {
                         long t1 = System.nanoTime();
                         c = getParent().loadClass(name);
-                        sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);
-                        sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);
-                        sun.misc.PerfCounter.getFindClasses().increment();
+            
                     }
                 }
                 if (resolve) {
