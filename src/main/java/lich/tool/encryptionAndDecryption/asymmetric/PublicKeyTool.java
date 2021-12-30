@@ -3,6 +3,7 @@ package lich.tool.encryptionAndDecryption.asymmetric;
 
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import lich.tool.conflictResolution.Parameters;
 import lich.tool.encryptionAndDecryption.EncryptionAndDecryptionException;
 import lich.tool.encryptionAndDecryption.Proxy;
@@ -51,10 +52,10 @@ public class PublicKeyTool{
 	 * @return 公钥证书
 	 * @throws EncryptionAndDecryptionException 
 	 */
-	public static Certificate getX509Certificate(PublicKeyInfo pki,PublicKey pk) throws EncryptionAndDecryptionException{
+	public static X509Certificate getX509Certificate(PublicKeyInfo pki,PublicKey pk) throws EncryptionAndDecryptionException{
 		try {
 			init();
-			return (Certificate)publicKeyToolProxy.exec("getX509Certificate", new Parameters().addParameter(pki).addParameter(PublicKey.class,pk));
+			return (X509Certificate)publicKeyToolProxy.exec("getX509Certificate", new Parameters().addParameter(pki).addParameter(PublicKey.class,pk));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}	
@@ -116,5 +117,65 @@ public class PublicKeyTool{
 		}
 	}
 	
-	
+	/**
+	 * 获取p7b证书链上所有证书
+	 * @param p7b p7b p7c bytes
+	 * @param isCheckChain 是否校验证书链
+	 * @return  X509Certificate [] 
+	 * @throws EncryptionAndDecryptionException 证书链校验失败
+	 */
+	public static  X509Certificate[] loadP7bToChain(byte [] p7b,boolean isCheckChain) throws EncryptionAndDecryptionException {
+		try {
+			init();
+			return (X509Certificate[])publicKeyToolProxy.exec("loadP7bToChain", new Parameters().addParameter(byte [].class,p7b).addParameter(boolean.class,isCheckChain));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+		
+	}
+	/**
+	 *  获取p7b证书链上的证书
+	 * @param p7b p7b p7c bytes
+	 * @param isCheckChain 是否校验证书链
+	 * @return X509Certificate
+	 * @throws EncryptionAndDecryptionException 证书链校验失败
+	 */
+	public static X509Certificate loadP7bToX509Certificate(byte [] p7b,boolean isCheckChain) throws  EncryptionAndDecryptionException {
+		try {
+			init();
+			return (X509Certificate)publicKeyToolProxy.exec("loadP7bToX509Certificate", new Parameters().addParameter(byte [].class,p7b).addParameter(boolean.class,isCheckChain));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+	}
+	/**
+	 *  证书列表转换证书链
+	 * @param certificateChain 证书列表
+	 * @param isCheckChain 是否校验证书链
+	 * @return X509Certificate
+	 * @throws EncryptionAndDecryptionException 证书链校验失败
+	 */
+	public static byte[] certificateChainToP7b(X509Certificate [] certificateChain,boolean isCheckChain) throws  EncryptionAndDecryptionException {
+		try {
+			init();
+			return (byte [])publicKeyToolProxy.exec("certificateChainToP7b", new Parameters().addParameter(X509Certificate [].class,certificateChain).addParameter(boolean.class,isCheckChain));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+	}
+	/**
+	 * 证书列表转换证书链
+	 * @param certificateChain [i][证书bytes]
+	 * @param isCheckChain 是否校验证书链
+	 * @return p7b bytes
+	 * @throws EncryptionAndDecryptionException 证书链校验失败
+	 */
+	public static byte[] certificateChainToP7b(byte [][] certificateChain,boolean isCheckChain) throws EncryptionAndDecryptionException {
+		try {
+			init();
+			return (byte [])publicKeyToolProxy.exec("certificateChainToP7b", new Parameters().addParameter(byte [][].class,certificateChain).addParameter(boolean.class,isCheckChain));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+	}
 }

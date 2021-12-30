@@ -122,7 +122,7 @@ public class AsymmetricTool{
 	public static byte[] SM2CipherToSM2EncDataC1C2C3(byte[] b)throws EncryptionAndDecryptionException {	
 		try {
 			init();
-			return (byte[])asymmetricToolProxy.exec("SM2CipherToSM2EncDataC1C2C3", new Parameters().addParameter(b));
+			return (byte[])asymmetricToolProxy.exec("SM2CipherToSM2EncDataC1C2C3", new Parameters().addParameter(byte[].class,b));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
@@ -136,7 +136,7 @@ public class AsymmetricTool{
 	public static byte[] SM2EncDataC1C2C3ToSM2Cipher(byte[] b) throws EncryptionAndDecryptionException {	
 		try {
 			init();
-			return (byte[])asymmetricToolProxy.exec("SM2EncDataC1C2C3ToSM2Cipher", new Parameters().addParameter(b));
+			return (byte[])asymmetricToolProxy.exec("SM2EncDataC1C2C3ToSM2Cipher", new Parameters().addParameter(byte[].class,b));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
