@@ -17,7 +17,7 @@ public class Base {
 	private static Proxy baseProxy;
 	private static void init() throws EncryptionAndDecryptionException {
 		try {
-			if(baseProxy==null) {
+			if(baseProxy==null) {  
 				baseProxy=new Proxy("lich.tool.encryptionAndDecryption.core.Base");
 			}
 		} catch (Exception e) {

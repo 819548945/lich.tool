@@ -36,7 +36,19 @@ public class PrivateKeyTool{
 			throw new EncryptionAndDecryptionException(e);
 		}
 	}
-	
+	/**
+	 * 获取私钥
+	 * @param privateKey 私钥
+	 * @return GM d RSA p8
+	 */
+	public static byte[] getPrivateKeyBytes(PrivateKey privateKey) throws EncryptionAndDecryptionException{
+		try {
+			init();
+			return (byte[])privateKeyToolProxy.exec("getPrivateKeyBytes", new Parameters().addParameter(privateKey));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}
+	}
 	
 	/**
 	 * GM私钥加载（使用内置密钥解密）
@@ -62,7 +74,7 @@ public class PrivateKeyTool{
 	public static PrivateKey toGMPrivateKeyByEnvelopedKeyBlob(byte [] doubleprvkey,PrivateKey privateKey) throws Exception {
 		try {
 			init();
-			return (PrivateKey)privateKeyToolProxy.exec("toGMPrivateKeyByEnvelopedKeyBlob", new Parameters().addParameter(doubleprvkey).addParameter(privateKey));
+			return (PrivateKey)privateKeyToolProxy.exec("toGMPrivateKeyByEnvelopedKeyBlob", new Parameters().addParameter(doubleprvkey).addParameter(PrivateKey.class,privateKey));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}
