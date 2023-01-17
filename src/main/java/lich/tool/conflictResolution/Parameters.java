@@ -59,12 +59,12 @@ public class Parameters {
 	 * @param objs parametes
 	 * @return Oneself
 	 */
-	public Parameters addParametes(Object... objs) {
+	/*public Parameters addParametes(Object... objs) {
 		for(Object obj:objs) {
 			this.addParameter(obj);
 		}
 		return this;
-	}
+	}*/
 	Class[] getClssArray(){
 		return clss.toArray(new Class[clss.size()]);
 	}
