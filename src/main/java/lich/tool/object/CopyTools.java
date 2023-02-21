@@ -20,6 +20,16 @@ import lich.tool.object.ReplaceObject.ReplaceObjectRule;
 public class CopyTools {
 	
 	private static Map<String,Map<String,ConversionInfo>> conversions=new HashMap<String, Map<String,ConversionInfo>>();
+	
+	
+	public static void setFieldValue(String fieldName,Object v,Object... os) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		for(Object o:os) {
+			Field field=o.getClass().getDeclaredField(fieldName);
+			field.setAccessible(true);
+			field.set(o,v) ;   
+		}
+	}
+	
 	/**
 	 * field type change Rules
 	 * @param cif ConversionInfo
@@ -72,9 +82,10 @@ public class CopyTools {
 		  try {
 			   Class  oClass = original.getClass();
 			   Class tClass= target.getClass();
-			   if(oClass==HashMap.class&&tClass==HashMap.class) {
-				   HashMap oc1= (HashMap)original ;
-				   HashMap tc1=  (HashMap)target;
+			  
+			   if(Map.class.isAssignableFrom(oClass)&&Map.class.isAssignableFrom(tClass)) {
+				   Map oc1= (Map)original ;
+				   Map tc1=  (Map)target;
 				   Iterator iterator= oc1.keySet().iterator();
 				   boolean b=false;
 					  for(int i=0;i<modes.length;i++) 
@@ -98,8 +109,29 @@ public class CopyTools {
 						}
 						
 				  }
-				}else if(oClass==HashMap.class&&tClass!=HashMap.class){
-				   HashMap oc1= (HashMap)original ;
+				}else if(!Map.class.isAssignableFrom(oClass)&&Map.class.isAssignableFrom(tClass)){
+					   Map tc1= (Map)target ;
+					   Field[] fields =oClass.getDeclaredFields();
+					   for (int i = 0; i < fields.length; i++) {
+						Field field = fields[i];
+						String mName=field.getName();
+						field.setAccessible(true);
+						if(modes.length==0)tc1.put(mName, field.get(original));
+						for(int z=0;z<modes.length;z++) {
+							Mode mode=modes[z];
+							if(mode==Mode.UNDERLINE_TO_HUMP_UP||mode==Mode.UNDERLINE_TO_HUMP_LO||mode==Mode.UNDERLINE_TO_HUMP_AUTO) {
+								String[] ss = mName.split("(?<!^)(?=[A-Z])");
+								 mName="";
+								 if(mode==Mode.UNDERLINE_TO_HUMP_UP)for(int x = 0 ;x < ss.length; x ++) mName+="_"+ss[x].toUpperCase();
+								 if(mode==Mode.UNDERLINE_TO_HUMP_LO) for(int x = 0 ;x < ss.length; x ++) mName+="_"+ss[x].toLowerCase();
+								 if(mode==Mode.UNDERLINE_TO_HUMP_AUTO) for(int x = 0 ;x < ss.length; x ++) mName+="_"+ss[x];
+								 mName=mName.substring(1);
+							}
+							tc1.put(mName, field.get(original));	
+						}	
+					}
+				  }else if(Map.class.isAssignableFrom(oClass)&&!Map.class.isAssignableFrom(tClass)){
+				   Map oc1= (Map)original ;
 				   Field[] fields =tClass.getDeclaredFields();
 				   for (int i = 0; i < fields.length; i++) {
 					Field field = fields[i];
@@ -122,8 +154,7 @@ public class CopyTools {
 							 mName=mName.substring(1);
 						}
 						if(oc1.containsKey(mName))setValue(field,target,typeConversion(oc1.get(mName),field.getType()));	
-					}
-					
+					}	
 				}
 			  }else if(oClass==tClass) {
 				  	Field[] fields=oClass.getDeclaredFields(); 
@@ -162,10 +193,22 @@ public class CopyTools {
 		}  
 	   }
 	 
-	 	private static void setValue(Field field,Object target,Object v) throws IllegalArgumentException, IllegalAccessException {
+	 	private static void setValue(Field field,Object target,Object v) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
 	 		if(v!=null) {
 	 			field.setAccessible(true);
-	 			field.set(target,v);
+	 			try {
+	 				field.set(target,v);
+				} catch (ClassCastException e) {
+					Object o=field.getType().newInstance();
+					copyField(v,o);
+					field.set(field,o);
+				}
+	 			
+	 			
+	 			
+	 			
+	 			
+	 			
 	 		}	
 	 	}
 	   private static boolean autoStringCheck(String s,int index) throws ConvertException {
@@ -182,7 +225,7 @@ public class CopyTools {
 			  return autoStringCheck( s,index+1);
 		   }
 	   }
-	   private static Object typeConversion(Object original,Class tClass) throws ClassCastException  {
+	   private static Object typeConversion(Object original,Class tClass) throws ClassCastException, InstantiationException, IllegalAccessException  {
 		   	   if(original==null) {
 		   		  return null;
 		   	   }
@@ -221,8 +264,12 @@ public class CopyTools {
 			   else if(oClass==String.class&&(tClass==Long.class||tClass.getName().equals("long")))return Long.parseLong((String)original);
 			   else if(oClass==String.class&&(tClass==Byte.class||tClass.getName().equals("byte")))return Byte.parseByte((String)original);
 			   else if(oClass==String.class&&(tClass==Short.class||tClass.getName().equals("short")))return Short.parseShort((String)original); 
-			   else{ 
-					return tClass.cast(original);
+			   else if( Map.class.isAssignableFrom(oClass)&&!Map.class.isAssignableFrom(tClass)){ 
+				   	Object o=tClass.newInstance();
+					copyField(original,o);
+					return o;
+			   }else {
+				   return tClass.cast(original);
 			   }	   
 		}
 	   /**
