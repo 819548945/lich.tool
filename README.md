@@ -39,7 +39,7 @@
 
 git：  https://github.com/819548945/lich.tool/
 
-文档： http://doc.lich.tk/
+文档： http://doc.lich.me/
 
 bug、意见反馈: liuchao_@outlook.com
 
