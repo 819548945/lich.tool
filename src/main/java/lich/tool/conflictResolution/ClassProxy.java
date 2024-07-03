@@ -33,6 +33,16 @@ public class ClassProxy {
 	}
 	
 	/**
+	 * load Object
+	 * @param o object
+	 * @throws ConflictResolutionException
+	 */
+	public ClassProxy(Object o) throws ConflictResolutionException {
+		this.classLoader=toCLClassloader( o.getClass().getClassLoader());
+		this.cls  =  o.getClass();
+		this.obj=o;
+	}
+	/**
 	 * 
 	 * @param className className
 	 * @param jarBasePaths jar paths
@@ -86,7 +96,7 @@ public class ClassProxy {
 		this.obj=obj;
 	}
 	@Deprecated
-	protected ClassProxy(Object obj,URLClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException, ConflictResolutionException {
+	public ClassProxy(Object obj,URLClassLoader classLoader ) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException, ConflictResolutionException {
 		this.classLoader=toCLClassloader(classLoader);
 		this.cls  =  obj.getClass();
 		this.obj=obj;
@@ -125,6 +135,26 @@ public class ClassProxy {
 		return method1.invoke(obj,p.getObjArray());
 	}
 	/**
+	 * exec method return to ClassProxy
+	 * @param methodName
+	 * @param d
+	 * @return
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws InstantiationException
+	 * @throws ConflictResolutionException
+	 * @throws IOException
+	 */
+	public ClassProxy execl(String methodName,Object ... d) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, ConflictResolutionException, IOException {
+		return new ClassProxy(exec( methodName,d));
+		
+	}
+	
+	
+	/**
 	 * exec method
 	 * @param methodName method Name
 	 * @param p Parameters
@@ -142,6 +172,24 @@ public class ClassProxy {
 		p=switchClassLoader(p);
 		Method method1 =this.cls.getMethod(methodName,p.getClssArray());
 		return method1.invoke(obj,p.getObjArray());
+	}
+	/**
+	 * exec method return to ClassProxy
+	 * @param methodName
+	 * @param p
+	 * @return
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws InstantiationException
+	 * @throws ConflictResolutionException
+	 * @throws IOException
+	 */
+	public ClassProxy execl(String methodName,Parameters p)  throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, ConflictResolutionException, IOException {
+		return new ClassProxy(exec( methodName,p));
+		
 	}
 	private Parameters switchClassLoader(Parameters p) throws IOException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, ConflictResolutionException {
 		Object[] os=p.getObjArray();
@@ -221,6 +269,7 @@ public class ClassProxy {
 		obj=cls.getConstructor(p.getClssArray()).newInstance(p.getObjArray());
 		return this;
 	}
+	
 	/**
 	 * Gets the proxy object
 	 * @return original object

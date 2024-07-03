@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.819548945</groupId>
   <artifactId>tool</artifactId>
- <version>0.1.11</version> 
+ <version>0.1.12</version> 
  <packaging>jar</packaging>
  <!--   <version>0.0.1</version>-->
   <parent>
@@ -87,13 +87,7 @@
                                     <goal>jar-no-fork</goal>
                                 </goals>
                             </execution>
-                            <execution>
-                                <id>snapshot</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
+                           
                         </executions>
                     </plugin>
                     <plugin>

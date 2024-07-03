@@ -20,6 +20,10 @@ public class Proxy extends ClassProxy{
 		
 		super(className, classLoader);		
 	}
+	public Proxy(Object o) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MalformedURLException, URISyntaxException, ConflictResolutionException {
+		super(o,classLoader);
+	}
+	
 	public Proxy(String className,InputStream in) throws ClassNotFoundException, InstantiationException, IllegalAccessException, URISyntaxException, IOException, ConflictResolutionException {
 		super(className,classLoader,in);
 	}
@@ -36,5 +40,6 @@ public class Proxy extends ClassProxy{
 			throw new EncryptionAndDecryptionException(e);
 		}
 		
-	}		
+	}	
+	
 }

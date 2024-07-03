@@ -199,4 +199,12 @@ public class AsymmetricTool{
   			throw new EncryptionAndDecryptionException(e);
   		}
      }
+     public static byte[] SM2CipherToEncDataC1C3C2(byte[] b) throws EncryptionAndDecryptionException{
+    	 try {
+   			init();
+   			return (byte[])asymmetricToolProxy.exec("SM2CipherToEncDataC1C3C2", new Parameters().addParameter(b));
+   		} catch (Exception e) {
+   			throw new EncryptionAndDecryptionException(e);
+   		}
+     }
 }
