@@ -55,7 +55,7 @@ public class PublicKeyTool{
 	public static X509Certificate getX509Certificate(PublicKeyInfo pki,PublicKey pk) throws EncryptionAndDecryptionException{
 		try {
 			init();
-			return (X509Certificate)publicKeyToolProxy.exec("getX509Certificate", new Parameters().addParameter(pki).addParameter(PublicKey.class,pk));
+			return (X509Certificate)publicKeyToolProxy.exec("getX509Certificate", new Parameters().addParameter(PublicKeyInfo.class,pki).addParameter(PublicKey.class,pk));
 		} catch (Exception e) {
 			throw new EncryptionAndDecryptionException(e);
 		}	

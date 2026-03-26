@@ -23,6 +23,7 @@ public class TestP7B {
 		Date end=	new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-12-31 23:59:59");
 		PublicKeyInfo publicKeyInfo=new PublicKeyInfo(begin, end, "C=CN , CN=GMTEST");
 		System.out.println("-----------certificateChainToP7b-----------");
+		System.out.println(KeyPairTool.generateGMKeyPair().getPublic());
 		X509Certificate x509c=PublicKeyTool.getX509Certificate(publicKeyInfo, KeyPairTool.generateGMKeyPair().getPublic())	;
 		X509Certificate chain []= {Base.getRootGMX509Certificate(),x509c};
 		String p7b=Base64.encodeBase64String(PublicKeyTool.certificateChainToP7b(chain, true));

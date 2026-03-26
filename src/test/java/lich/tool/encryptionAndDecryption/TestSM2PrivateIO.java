@@ -18,6 +18,7 @@ public class TestSM2PrivateIO {
 	}
 	@Test
 	public void test() throws Exception {
+		System.out.println(InitRootCert.class.getResource("lib"));
 		Proxy.init(InitRootCert.class.getResource("lib"));
 		byte[] ori="测试1111".getBytes("utf-8");
 		System.out.println("-----------测试原密钥正确性-----------");
