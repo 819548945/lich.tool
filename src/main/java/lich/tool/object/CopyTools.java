@@ -4,10 +4,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 
 import lich.tool.object.ReplaceObject.ReplaceMod;
 import lich.tool.object.ReplaceObject.ReplaceObjectRule;
@@ -111,9 +114,9 @@ public class CopyTools {
 				  }
 				}else if(!Map.class.isAssignableFrom(oClass)&&Map.class.isAssignableFrom(tClass)){
 					   Map tc1= (Map)target ;
-					   Field[] fields =oClass.getDeclaredFields();
-					   for (int i = 0; i < fields.length; i++) {
-						Field field = fields[i];
+					   List<Field> fields =getAllFieldsList(oClass);
+					   for (int i = 0; i < fields.size(); i++) {
+						Field field = fields.get(i);
 						String mName=field.getName();
 						field.setAccessible(true);
 						if(modes.length==0)tc1.put(mName, field.get(original));
@@ -132,9 +135,9 @@ public class CopyTools {
 					}
 				  }else if(Map.class.isAssignableFrom(oClass)&&!Map.class.isAssignableFrom(tClass)){
 				   Map oc1= (Map)original ;
-				   Field[] fields =tClass.getDeclaredFields();
-				   for (int i = 0; i < fields.length; i++) {
-					Field field = fields[i];
+				   List<Field> fields =getAllFieldsList(oClass);
+				   for (int i = 0; i < fields.size(); i++) {
+					Field field =  fields.get(i);
 					String mName=field.getName();
 					if(modes.length==0)setValue(field,target,typeConversion(oc1.get(mName),field.getType()));	
 					for(int z=0;z<modes.length;z++) {
@@ -157,7 +160,8 @@ public class CopyTools {
 					}	
 				}
 			  }else if(oClass==tClass) {
-				  	Field[] fields=oClass.getDeclaredFields(); 
+				 
+				  	List<Field> fields=getAllFieldsList(oClass); 
 					for(Field field:fields) {
 						field.setAccessible(true);  
 				        Object val = field.get(original); 
@@ -167,7 +171,7 @@ public class CopyTools {
 					}
 				  
 			   }else if(oClass!=tClass) {
-				   Field[] fields=oClass.getDeclaredFields(); 
+					List<Field> fields=getAllFieldsList(oClass); 
 					for(Field field:fields) {
 						field.setAccessible(true);  
 				        Object val = field.get(original); 
@@ -192,7 +196,16 @@ public class CopyTools {
 			return false;
 		}  
 	   }
-	 
+	    public static List<Field> getAllFieldsList(final Class<?> cls) {
+	        final List<Field> allFields = new ArrayList<>();
+	        Class<?> currentClass = cls;
+	        while (currentClass != null) {
+	            final Field[] declaredFields = currentClass.getDeclaredFields();
+	            Collections.addAll(allFields, declaredFields);
+	            currentClass = currentClass.getSuperclass();
+	        }
+	        return allFields;
+	    }
 	 	private static void setValue(Field field,Object target,Object v) throws IllegalArgumentException, IllegalAccessException, InstantiationException {
 	 		if(v!=null) {
 	 			field.setAccessible(true);
