@@ -167,4 +167,19 @@ public class PrivateKeyTool{
 			throw new EncryptionAndDecryptionException(e);
 		}	
 	}
+	/**
+	 * GM/T-0009-2012 SM2EnvelopedKey 转换为GM/T-0018-2012 EnvelopedKeyBlob 
+	 * @param derBytes SM2EnvelopedKey
+	 * @return EnvelopedKeyBlob
+	 * @throws Exception
+	 */
+	public static byte[] SM2EnvelopedKeyToEnvelopedKeyBlob(byte[] b) throws EncryptionAndDecryptionException{
+		try {
+			init();
+			return (byte[])privateKeyToolProxy.exec("SM2EnvelopedKeyToEnvelopedKeyBlob", new Parameters().addParameter(b));
+		} catch (Exception e) {
+			throw new EncryptionAndDecryptionException(e);
+		}	
+	}
+	
 }
